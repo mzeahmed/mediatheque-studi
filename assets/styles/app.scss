@@ -1,0 +1,16 @@
+@import "~bootswatch/dist/materia/bootstrap.min.css";
+@import "header";
+@import "forms";
+
+body {
+    //min-height: calc(100vh - 180px);
+
+    div.container, div.container-fluid {
+        margin-top: 20px;
+    }
+
+    footer {
+        position: absolute;
+        bottom: 0;
+    }
+}

@@ -44,6 +44,11 @@ class Book
      */
     private $genre;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Borrow::class, inversedBy="books")
+     */
+    private $borrow;
+
     public function __construct()
     {
         $this->genre = new ArrayCollection();
@@ -122,6 +127,18 @@ class Book
     public function removeGenre(Genre $genre): self
     {
         $this->genre->removeElement($genre);
+
+        return $this;
+    }
+
+    public function getBorrow(): ?Borrow
+    {
+        return $this->borrow;
+    }
+
+    public function setBorrow(?Borrow $borrow): self
+    {
+        $this->borrow = $borrow;
 
         return $this;
     }

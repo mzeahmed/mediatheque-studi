@@ -52,6 +52,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $isBornAt;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Borrow::class, mappedBy="borrower")
+     */
+    private $borrows;
+
+    public function __construct()
+    {
+        $this->borrows = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -173,6 +183,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsBornAt(\DateTimeInterface $isBornAt): self
     {
         $this->isBornAt = $isBornAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Borrow[]
+     */
+    public function getBorrows(): Collection
+    {
+        return $this->borrows;
+    }
+
+    public function addBorrow(Borrow $borrow): self
+    {
+        if (!$this->borrows->contains($borrow)) {
+            $this->borrows[] = $borrow;
+            $borrow->setBorrower($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBorrow(Borrow $borrow): self
+    {
+        if ($this->borrows->removeElement($borrow)) {
+            // set the owning side to null (unless already changed)
+            if ($borrow->getBorrower() === $this) {
+                $borrow->setBorrower(null);
+            }
+        }
 
         return $this;
     }
