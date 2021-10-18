@@ -10,6 +10,7 @@ import './styles/app.scss';
 import '@popperjs/core/dist/umd/popper.min';
 import 'bootstrap/dist/js/bootstrap.min';
 import '@fortawesome/fontawesome-free/css/all.css';
+// import './js/register';
 
 // start the Stimulus application
 import './bootstrap';

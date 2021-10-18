@@ -1,7 +1,9 @@
-#login {
-    .login-form {
-        border: 1px solid;
-        padding: 55px;
-        border-radius: 10px;
+.login-form, #register_form {
+    border: 1px solid;
+    padding: 55px;
+    border-radius: 10px;
+
+    .invalid-feedback {
+        color: #fff !important;
     }
 }

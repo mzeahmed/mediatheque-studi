@@ -2,6 +2,10 @@
 
 {% block title %}Connexion{% endblock %}
 
+{% block seo %}
+    <meta name="robots" content="noindex, nofollow">
+{% endblock %}
+
 {% block body_id 'login' %}
 
 {% block main %}
@@ -19,7 +23,7 @@
                     {# </div> #}
                     {# {% endif %} #}
 
-                    <h1 class="h3 mb-3 font-weight-normal text-center">Connectez-vous</h1>
+                    <h1 class="h3 mb-3 font-weight-normal text-center">Connexion</h1>
                     <label for="inputEmail"></label>
                     <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control"
                            autocomplete="email" placeholder="email" required autofocus>

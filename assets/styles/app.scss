@@ -1,9 +1,18 @@
 @import "~bootswatch/dist/materia/bootstrap.min.css";
-@import "header";
 @import "forms";
 
 body {
-    //min-height: calc(100vh - 180px);
+    .mediatheque-header-container {
+
+        a {
+            text-decoration: none !important;
+        }
+
+        img {
+            height: 30px;
+            border-radius: 50%;
+        }
+    }
 
     div.container, div.container-fluid {
         margin-top: 20px;
@@ -12,5 +21,6 @@ body {
     footer {
         position: absolute;
         bottom: 0;
+        width: 100%;
     }
 }
