@@ -5,6 +5,7 @@
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
     app.admin.email: 'houdjiva@gmail.com'
+    app.notifications.email.sender: 'contact@mediatheque.local'
 
 services:
     # default configuration for services in *this* file
@@ -28,4 +29,9 @@ services:
     App\Service\MediathequeMailer:
         class: 'App\Service\MediathequeMailer'
         arguments:
-            $sender: '%app.admin.email%'
+            $sender: '%app.notifications.email.sender%'
+
+    App\Service\Employee:
+        class: 'App\Service\Employee'
+        arguments:
+            $employee: '%app.admin.email%'

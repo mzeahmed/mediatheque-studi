@@ -4,11 +4,14 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\RegisterType;
+use App\Service\Employee;
+use App\Service\MediathequeMailer;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
@@ -19,9 +22,9 @@ class SecurityController extends AbstractController
      */
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
-        // if ($this->getUser()) {
-        //     return $this->redirectToRoute('target_path');
-        // }
+        if ($this->getUser()) {
+            return $this->redirectToRoute('app_home');
+        }
 
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
@@ -43,17 +46,22 @@ class SecurityController extends AbstractController
      * @Route("/register", name="app_register")
      *
      * @param Request                     $request
-     * @param EntityManagerInterface      $em
+     * @param Employee                    $employee
      * @param UserPasswordHasherInterface $hasher
+     * @param MediathequeMailer           $mailer
      *
      * @return Response
+     * @throws TransportExceptionInterface
      */
-    public function register(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $hasher): Response
+    public function register(Request $request, Employee $employee, UserPasswordHasherInterface $hasher, MediathequeMailer $mailer): Response
     {
         if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
             return $this->redirectToRoute('app_home');
         }
 
+        $employeeEmail = $employee->getEmployee()->getEmail();
+
+        $em   = $this->getDoctrine()->getManager();
         $user = new User();
 
         $form = $this->createForm(RegisterType::class, $user, [
@@ -83,7 +91,7 @@ class SecurityController extends AbstractController
             $em->persist($user);
             $em->flush();
 
-            // Envoie de l'email à un emplyé/administrateur
+            $mailer->residentIsRegistered($employeeEmail);
 
             $this->addFlash(
                 'success',
