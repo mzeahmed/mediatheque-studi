@@ -21,10 +21,12 @@ class BookEntityListener
     public function prePersist(Book $book, LifecycleEventArgs $event)
     {
         $book->initializeSlug($this->slugger);
+        $book->setIsPublishedAt(new \DateTime());
     }
 
     public function preUpdate(Book $book, LifecycleEventArgs $event)
     {
         $book->initializeSlug($this->slugger);
+        $book->setUpdatedAt(new \DateTime());
     }
 }

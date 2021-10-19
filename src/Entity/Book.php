@@ -65,16 +65,24 @@ class Book
     /**
      * @UploadableField(filename="coverName", path="uploads/books")
      * @Assert\Image(
-     *     maxHeight=800,
      *     maxWidth=800,
-     *     maxHeightMessage="L'image doit avoir une hauteur maximale de 500 px (image carrée de préférence).",
-     *     maxWidthMessage="L'image doit avoir une largeur maximale de 500 px (image carrée de préférence)."
+     *     maxWidthMessage="L'image doit avoir une largeur maximale de 800 px (image carrée de préférence)."
      * )
      * @Assert\NotBlank(message="Vous devez charger une image de couverture")
      *
      * @var File
      */
     private $coverFile;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $slug;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $isPublishedAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
@@ -84,20 +92,21 @@ class Book
     /**
      * @ORM\Column(type="boolean")
      */
-    private $isVailable;
+    private $isBorrowed = 0;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="datetime", nullable=true)
      */
-    private $slug;
+    private $isBorrowedAt;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $isReturnedAt;
 
     public function __construct()
     {
         $this->genre = new ArrayCollection();
-
-        if (empty($this->updatedAt)) {
-            $this->updatedAt = new \DateTime();
-        }
     }
 
     /**
@@ -106,11 +115,6 @@ class Book
     public function initializeSlug(SluggerInterface $slugger)
     {
         $this->slug = $slugger->slug($this->getTitle())->lower();
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
     }
 
     public function getTitle(): ?string
@@ -125,6 +129,10 @@ class Book
         return $this;
     }
 
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
 
     public function getDescription(): ?string
     {
@@ -224,14 +232,14 @@ class Book
         return $this;
     }
 
-    public function getIsVailable(): ?bool
+    public function getIsBorrowed(): ?bool
     {
-        return $this->isVailable;
+        return $this->isBorrowed;
     }
 
-    public function setIsVailable(bool $isVailable): self
+    public function setIsBorrowed(bool $isBorrowed): self
     {
-        $this->isVailable = $isVailable;
+        $this->isBorrowed = $isBorrowed;
 
         return $this;
     }
@@ -248,6 +256,18 @@ class Book
         return $this;
     }
 
+    public function getIsPublishedAt(): ?\DateTimeInterface
+    {
+        return $this->isPublishedAt;
+    }
+
+    public function setIsPublishedAt(?\DateTimeInterface $isPublishedAt): self
+    {
+        $this->isPublishedAt = $isPublishedAt;
+
+        return $this;
+    }
+
     public function getUpdatedAt(): ?\DateTimeInterface
     {
         return $this->updatedAt;
@@ -256,6 +276,30 @@ class Book
     public function setUpdatedAt(?\DateTimeInterface $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getIsBorrowedAt(): ?\DateTimeInterface
+    {
+        return $this->isBorrowedAt;
+    }
+
+    public function setIsBorrowedAt(?\DateTimeInterface $isBorrowedAt): self
+    {
+        $this->isBorrowedAt = $isBorrowedAt;
+
+        return $this;
+    }
+
+    public function getIsReturnedAt(): ?\DateTimeInterface
+    {
+        return $this->isReturnedAt;
+    }
+
+    public function setIsReturnedAt(?\DateTimeInterface $isReturnedAt): self
+    {
+        $this->isReturnedAt = $isReturnedAt;
 
         return $this;
     }

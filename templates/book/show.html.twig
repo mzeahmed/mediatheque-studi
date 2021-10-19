@@ -2,6 +2,10 @@
 
 {% block title %}{{ book.title }}{% endblock %}
 
+{% block seo %}
+    <meta name="robots" content="noindex, nofollow">
+{% endblock %}
+
 {% block body_id 'book_show' %}
 
 {% block main %}

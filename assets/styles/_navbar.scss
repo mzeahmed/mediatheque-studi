@@ -1,0 +1,46 @@
+.mediatheque-navbar {
+    padding-left: 95px;
+    padding-right: 95px;
+
+    a {
+        text-decoration: none !important;
+    }
+
+    img {
+        height: 30px;
+        border-radius: 50%;
+    }
+
+    //.med-nav-links {
+    //    width: 100%;
+    //}
+
+    .logout-item {
+        position: absolute;
+        right: 10%;
+    }
+
+    .nav-login-btn {
+        margin-right: 15px;
+    }
+
+    .nav-register-btn {
+        color: #2196f3 !important;
+        background-color: #fff !important;
+        border: 1px solid #2196f3;
+    }
+
+    .nav-register-btn:hover {
+        color: #fff !important;
+        background-color: #2196f3 !important;
+    }
+}
+
+/** RESPONSIVE **/
+@media screen and (max-width: 991px) {
+    .mediatheque-navbar {
+        .logout-item {
+            position: unset !important;
+        }
+    }
+}

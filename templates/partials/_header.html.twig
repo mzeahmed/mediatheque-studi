@@ -1,43 +1,36 @@
-<header class="p-3 mb-3 border-bottom">
-    <div class="container mediatheque-header-container ">
-        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-            <a href="{{ path('app_home') }}"
-               class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none">
-                <img src="{{ asset('build/images/logo.jpg') }}" alt="">
-            </a>
-
-            {% if app.user %}
-                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                    <li><a href="{{ path('app_catalog') }}" class="nav-link px-2 link-dark">Voir la mediatheque</a></li>
-                    {% if is_granted('ROLE_ADMIN') %}
-                        <li><a href="{{ path('aap_book_new') }}" class="nav-link px-2 link-dark">Ajouter un livre</a>
+<header class="mb-3 border-bottom">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light mediatheque-navbar">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ path('app_home') }}"><img src="{{ asset('build/images/logo.jpg') }}"
+                                                                       alt=""></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
+                    aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarText">
+                {% if app.user %}
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item home-item">
+                            <a class="nav-link" href="{{ path('app_catalog') }}">Accueil</a>
                         </li>
-                    {% endif %}
-                </ul>
-
-                <div class="dropdown text-end">
-                    <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1"
-                       data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
-                    </a>
-                    <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1" style="">
-                        <li><a class="dropdown-item" href="#">New project...</a></li>
-                        <li><a class="dropdown-item" href="#">Settings</a></li>
-                        <li><a class="dropdown-item" href="#">Profile</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li><a class="dropdown-item" href="{{ path('app_logout') }}">Se deconnecter</a></li>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <li class="nav-item book-add-item">
+                                <a class="nav-link" href="{{ path('app_book_new') }}">Ajouter un livre</a>
+                            </li>
+                        {% endif %}
                     </ul>
+                {% endif %}
+                <div class="navbar-text logout-item">
+                    {% if app.user %}
+                        <a class="nav-link" href="{{ path('app_logout') }}">Se déconnecter</a>
+                    {% else %}
+                        <a class="btn btn-primary text-white nav-login-btn mediatheque-btn"
+                           href="{{ path('app_login') }}">Se
+                            connecter</a>
+                        <a class="btn btn-primary text-white nav-register-btn" href="{{ path('app_register') }}">S'inscrire</a>
+                    {% endif %}
                 </div>
-            {% else %}
-                <div class="col-md-3 text-end">
-                    <button type="button" class="btn btn-outline-primary me-2"><a href="{{ path('app_login') }}">Se
-                            connecter</a></button>
-                    <button type="button" class="btn btn-primary"><a href="{{ path('app_register') }}"
-                                                                     class="text-white">S'inscrire</a></button>
-                </div>
-            {% endif %}
+            </div>
         </div>
-    </div>
+    </nav>
 </header>

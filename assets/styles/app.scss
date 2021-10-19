@@ -1,29 +1,26 @@
 @import "~bootswatch/dist/materia/bootstrap.min.css";
 @import "forms";
 @import "book/book";
+@import "navbar";
 
 body {
-    .mediatheque-header-container {
-        a {
-            text-decoration: none !important;
-        }
-
-        img {
-            height: 30px;
-            border-radius: 50%;
-        }
-
-        .med-nav-links {
-            width: 100%;
-        }
-    }
-
     main {
         min-height: calc(100vh - 200px) !important;
     }
 
     div.container, div.container-fluid {
         margin-top: 20px;
+    }
+
+    .mediatheque-btn {
+        color: #fff;
+        background-color: #2196f3;
+        border: 1px solid #2196f3;
+    }
+
+    .mediatheque-btn:hover {
+        color: #2196f3 !important;
+        background-color: #fff !important;
     }
 
     //footer {

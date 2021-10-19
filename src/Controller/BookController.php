@@ -26,15 +26,13 @@ class BookController extends AbstractController
      */
     public function index(BookRepository $bookRepository): Response
     {
-        dump($bookRepository->findAll());
-
         return $this->render('book/index.html.twig', [
             'books' => $bookRepository->findAll(),
         ]);
     }
 
     /**
-     * @Route("/book/new", name="aap_book_new", methods= {"GET", "POST"})
+     * @Route("/book/new", name="app_book_new", methods= {"GET", "POST"})
      *
      * @param Request $request
      *
@@ -51,7 +49,7 @@ class BookController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $book->setIsVailable(true);
+            $book->setIsBorrowed(true);
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($book);

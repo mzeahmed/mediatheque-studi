@@ -42,7 +42,8 @@
         {{ form_errors(form.isReleasedAt) }}
     </div>
 {% endif %}
+{{ form_label(form.isReleasedAt) }}
     {{ form_widget(form.isReleasedAt) }}
 
-<button class="btn btn-primary mt-3 mb-3">{{ button_label|default('Ajouter') }}</button>
+<button class="btn btn-primary mt-3 mb-3 mediatheque-btn">{{ button_label|default('Ajouter') }}</button>
 {{ form_end(form) }}
