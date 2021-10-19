@@ -1,12 +1,47 @@
 {{ form_start(form) }}
 
+{% if form_errors(form.title) %}
+    <div class="alert alert-danger">
+        {{ form_errors(form.title) }}
+    </div>
+{% endif %}
     {{ form_widget(form.title) }}
+
+{% if form_errors(form.coverFile) %}
+    <div class="alert alert-danger">
+        {{ form_errors(form.coverFile) }}
+    </div>
+{% endif %}
 {{ form_label(form.coverFile) }}
     {{ form_widget(form.coverFile) }}
+
+{% if form_errors(form.author) %}
+    <div class="alert alert-danger">
+        {{ form_errors(form.author) }}
+    </div>
+{% endif %}
     {{ form_widget(form.author) }}
+
+{% if form_errors(form.genre) %}
+    <div class="alert alert-danger">
+        {{ form_errors(form.genre) }}
+    </div>
+{% endif %}
 {{ form_label(form.genre) }}
     {{ form_widget(form.genre) }}
+
+{% if form_errors(form.description) %}
+    <div class="alert alert-danger">
+        {{ form_errors(form.description) }}
+    </div>
+{% endif %}
     {{ form_widget(form.description) }}
+
+{% if form_errors(form.isReleasedAt) %}
+    <div class="alert alert-danger">
+        {{ form_errors(form.isReleasedAt) }}
+    </div>
+{% endif %}
     {{ form_widget(form.isReleasedAt) }}
 
 <button class="btn btn-primary mt-3">{{ button_label|default('Sauvegarder') }}</button>

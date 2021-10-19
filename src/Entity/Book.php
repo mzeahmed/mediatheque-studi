@@ -3,12 +3,13 @@
 namespace App\Entity;
 
 use App\Repository\BookRepository;
+use Symfony\Component\HttpFoundation\File\File;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use App\Bundles\CoelacantheLabs\Annotation\Uploadable;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use App\Bundles\CoelacantheLabs\Annotation\Uploadable;
 use App\Bundles\CoelacantheLabs\Annotation\UploadableField;
 
 /**
@@ -40,6 +41,11 @@ class Book
     private $author;
 
     /**
+     * @ORM\Column(type="datetime")
+     */
+    private $isReleasedAt;
+
+    /**
      * @ORM\ManyToMany(targetEntity=Genre::class, inversedBy="books", cascade={"persist"})
      */
     private $genre;
@@ -50,26 +56,30 @@ class Book
     private $borrow;
 
     /**
-     * @ORM\OneToOne(targetEntity=Image::class, inversedBy="book", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\Column(type="string", length=255, nullable=true)
+     *
+     * @var string | null
      */
-    private $cover;
+    private $coverName;
 
     /**
-     * @UploadableField(filename="cover", path="uploads")
+     * @UploadableField(filename="coverName", path="uploads/books")
      * @Assert\Image(
-     *     maxHeight=500,
-     *     maxWidth=500,
+     *     maxHeight=800,
+     *     maxWidth=800,
      *     maxHeightMessage="L'image doit avoir une hauteur maximale de 500 px (image carrée de préférence).",
      *     maxWidthMessage="L'image doit avoir une largeur maximale de 500 px (image carrée de préférence)."
      * )
+     * @Assert\NotBlank(message="Vous devez charger une image de couverture")
+     *
+     * @var File
      */
     private $coverFile;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      */
-    private $isReleasedAt;
+    private $updatedAt;
 
     /**
      * @ORM\Column(type="boolean")
@@ -84,6 +94,10 @@ class Book
     public function __construct()
     {
         $this->genre = new ArrayCollection();
+
+        if (empty($this->updatedAt)) {
+            $this->updatedAt = new \DateTime();
+        }
     }
 
     /**
@@ -172,21 +186,19 @@ class Book
         return $this;
     }
 
-    public function getCover(): ?Image
+    public function getCoverName()
     {
-        return $this->cover;
-    }
-
-    public function setCover(Image $cover): self
-    {
-        $this->cover = $cover;
-
-        return $this;
+        return $this->coverName;
     }
 
     /**
-     * @return mixed | void
+     * @param $coverName
      */
+    public function setCoverName($coverName): void
+    {
+        $this->coverName = $coverName;
+    }
+
     public function getCoverFile()
     {
         return $this->coverFile;
@@ -232,6 +244,18 @@ class Book
     public function setSlug(string $slug): self
     {
         $this->slug = $slug;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(?\DateTimeInterface $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }
