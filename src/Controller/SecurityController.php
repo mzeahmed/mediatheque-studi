@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Form\RegisterType;
 use App\Service\Employee;
 use App\Service\MediathequeMailer;
+use App\Security\RegisterFormHandler;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -45,23 +46,18 @@ class SecurityController extends AbstractController
     /**
      * @Route("/register", name="app_register")
      *
-     * @param Request                     $request
-     * @param Employee                    $employee
-     * @param UserPasswordHasherInterface $hasher
-     * @param MediathequeMailer           $mailer
+     * @param Request             $request
+     * @param RegisterFormHandler $formHandler
      *
      * @return Response
      * @throws TransportExceptionInterface
      */
-    public function register(Request $request, Employee $employee, UserPasswordHasherInterface $hasher, MediathequeMailer $mailer): Response
+    public function register(Request $request, RegisterFormHandler $formHandler): Response
     {
         if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
             return $this->redirectToRoute('app_home');
         }
 
-        $employeeEmail = $employee->getEmployee()->getEmail();
-
-        $em   = $this->getDoctrine()->getManager();
         $user = new User();
 
         $form = $this->createForm(RegisterType::class, $user, [
@@ -69,37 +65,8 @@ class SecurityController extends AbstractController
                 'id' => 'register_form',
             ],
         ]);
-        $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $email      = $form->get('email')->getData();
-            $emailExist = $em->getRepository(User::class)->findOneBy(['email' => $email]);
-
-            if ($emailExist) {
-                $this->addFlash('danger',
-                    'Désolé, cette email est déja present dans notre base de données, veuillez en choisir un autre'
-                );
-
-                return $this->redirectToRoute('app_register');
-            }
-
-            $user
-                ->setPassword($hasher->hashPassword($user, $form->get('password')->getData()))
-                ->setRoles(['ROLE_USER'])
-            ;
-
-            $em->persist($user);
-            $em->flush();
-
-            $mailer->residentIsRegistered($employeeEmail);
-
-            $this->addFlash(
-                'success',
-                'Votre compte a bien été créé, une validation par un de nos emplyés est neccéssaire, vous recevrez un mail de confirmation'
-            );
-
-            return $this->redirectToRoute('app_home');
-        }
+        $formHandler->store($user, $form, 'app_register', 'app_home', $request);
 
         return $this->render('security/register.html.twig', [
             'user' => $user,

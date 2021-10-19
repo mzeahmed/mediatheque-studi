@@ -28,13 +28,15 @@ class BookController extends AbstractController
      */
     public function index(BookRepository $bookRepository): Response
     {
+        dump($bookRepository->findAll());
+        
         return $this->render('book/index.html.twig', [
             'books' => $bookRepository->findAll(),
         ]);
     }
 
     /**
-     * @Route("/new", name="book_new", methods= {"GET", "POST"})
+     * @Route("/new", name="aap_book_new", methods= {"GET", "POST"})
      *
      * @param Request $request
      *

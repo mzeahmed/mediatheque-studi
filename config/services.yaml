@@ -26,6 +26,16 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
+    upload.annotation_reader:
+        class: App\Bundles\CoelacantheLabs\Annotation\UploadAnnotationReader
+        arguments: [ '@annotations.reader' ]
+
+    aupload.handler:
+        class: App\Bundles\CoelacantheLabs\Listener\UploadSubscriber
+        arguments: [ "@upload.annotation_reader" ]
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+
     App\Service\MediathequeMailer:
         class: 'App\Service\MediathequeMailer'
         arguments:

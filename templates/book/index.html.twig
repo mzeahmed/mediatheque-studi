@@ -2,40 +2,36 @@
 
 {% block title %}Book index{% endblock %}
 
+{% block body_id 'catalog' %}
+
 {% block main %}
-    <div class="album py-5 bg-light">
-        <div class="container">
+    <div class="container mediatheque-catalog-container">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+            {% for book in books %}
+                <div class="col-md-4">
+                    <div class="card shadow">
+                        <img class="card-img-top catalog-img"
+                             src="{% if book.coverFile %} {{ asset(book.coverFile) }} {% endif %}"
+                             alt="Image du livre {{ book.title }}">
 
-            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-                {% for book in books %}
-                    <div class="col-md-4">
-                        <div class="card shadow-sm">
-                            <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
-                                 xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
-                                 preserveAspectRatio="xMidYMid slice" focusable="false"><title>{{ book.title }}</title>
-                                <rect width="100%" height="100%" fill="#55595c"/>
-                                {# <text x="50%" y="50%" fill="#eceeef" dy=".3em">{{ asset(book.coverFile) }}</text> #}
-                            </svg>
+                        <div class="card-body">
+                            <p class="card-text">{{ book.description }}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group">
+                                    <button type="button" class="catalog-see-btn btn btn-sm btn-secondary">Voir le livre
+                                    </button>
 
-                            <div class="card-body">
-                                <p class="card-text">{{ book.description }}</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">Voir le livre
+                                    {% if is_granted('ROLE_ADMIN') %}
+                                        <button type="button" class="catalog-edit-btn btn btn-sm btn-secondary">
+                                            Modifier le livre
                                         </button>
-
-                                        {% if is_granted('ROLE_ADMIN') %}
-                                            <button type="button" class="btn btn-sm btn-outline-secondary">
-                                                Modifier le livre
-                                            </button>
-                                        {% endif %}
-                                    </div>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
                     </div>
-                {% endfor %}
-            </div>
+                </div>
+            {% endfor %}
         </div>
     </div>
 {% endblock %}

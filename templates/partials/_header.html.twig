@@ -9,6 +9,10 @@
             {% if app.user %}
                 <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
                     <li><a href="{{ path('app_catalog') }}" class="nav-link px-2 link-dark">Voir la mediatheque</a></li>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <li><a href="{{ path('aap_book_new') }}" class="nav-link px-2 link-dark">Ajouter un livre</a>
+                        </li>
+                    {% endif %}
                 </ul>
 
                 <div class="dropdown text-end">
