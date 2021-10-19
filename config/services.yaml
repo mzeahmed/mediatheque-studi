@@ -35,3 +35,12 @@ services:
         class: 'App\Service\Employee'
         arguments:
             $employee: '%app.admin.email%'
+
+    App\Service\Paginator:
+        arguments:
+            $templatePath: 'partials/_pagination.html.twig'
+
+    App\EventListener\EntityListener\BookEntityListener:
+        tags:
+            - { name: 'doctrine.orm.entity_listener', event: 'prePersist', entity: 'App\Entity\Book' }
+            - { name: 'doctrine.orm.entity_listener', event: 'preUpdate', entity: 'App\Entity\Book' }

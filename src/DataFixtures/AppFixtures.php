@@ -4,6 +4,8 @@ namespace App\DataFixtures;
 
 use Faker\Factory;
 use App\Entity\User;
+use App\Entity\Book;
+use App\Entity\Genre;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -55,6 +57,17 @@ class AppFixtures extends Fixture
             $manager->persist($resident);
             $residents[] = $resident;
         }
+
+        // On ajoutes les genres
+        for ($i = 1; $i <= 6; $i++) {
+            $genre = new Genre();
+            $genre
+                ->setName($faker->word())
+            ;
+
+            $manager->persist($genre);
+        }
+
 
         $manager->flush();
     }

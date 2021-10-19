@@ -1,0 +1,13 @@
+{{ form_start(form) }}
+
+    {{ form_widget(form.title) }}
+{{ form_label(form.coverFile) }}
+    {{ form_widget(form.coverFile) }}
+    {{ form_widget(form.author) }}
+{{ form_label(form.genre) }}
+    {{ form_widget(form.genre) }}
+    {{ form_widget(form.description) }}
+    {{ form_widget(form.isReleasedAt) }}
+
+<button class="btn btn-primary mt-3">{{ button_label|default('Sauvegarder') }}</button>
+{{ form_end(form) }}

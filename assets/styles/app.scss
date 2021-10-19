@@ -1,7 +1,9 @@
 @import "~bootswatch/dist/materia/bootstrap.min.css";
 @import "forms";
+@import "book";
 
 body {
+
     .mediatheque-header-container {
 
         a {
@@ -12,15 +14,23 @@ body {
             height: 30px;
             border-radius: 50%;
         }
+
+        .med-nav-links {
+            width: 100%;
+        }
+    }
+
+    main {
+        min-height: calc(100vh - 200px) !important;
     }
 
     div.container, div.container-fluid {
         margin-top: 20px;
     }
 
-    footer {
-        position: absolute;
-        bottom: 0;
-        width: 100%;
-    }
+    //footer {
+    //    position: absolute !important;
+    //    bottom: 0 !important;
+    //    width: 100% !important;
+    //}
 }

@@ -1,0 +1,34 @@
+<nav class="text-center app-pagination" aria-label="Page Navigation">
+    <ul class="list-inline">
+        {% if page > 1 %}
+            <li class="list-inline-item float-sm-left">
+                <a class="g-rounded-50"
+                   href="{{ path(route, {'page': page - 1}) }}" aria-label="Previous">
+                    <span aria-hidden="true">
+                        <i class="fas fa-arrow-left"></i> {% trans %}Previous{% endtrans %}
+                    </span>
+                    <span class="sr-only">{% trans %}Previous{% endtrans %}</span>
+                </a>
+            </li>
+        {% endif %}
+
+        {% for i in 1..pages %}
+            <li class="list-inline-item g-hidden-sm-down">
+                <a class="{% if page == i %}active{% endif %} g-rounded-50 "
+                   href="{{ path(route, {'page': i}) }}">{{ i }}</a>
+            </li>
+        {% endfor %}
+
+        {% if page != pages %}
+            <li class="list-inline-item float-sm-right page-item">
+                <a class="g-rounded-50 "
+                   href="{{ path(route, {'page': page + 1}) }}" aria-label="Next">
+                    <span aria-hidden="true">
+                        {% trans %}Next{% endtrans %} <i class="fas fa-arrow-right"></i>
+                    </span>
+                    <span class="sr-only">{% trans %}Next{% endtrans %}</span>
+                </a>
+            </li>
+        {% endif %}
+    </ul>
+</nav>
