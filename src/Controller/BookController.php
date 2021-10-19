@@ -13,14 +13,12 @@ use Symfony\Component\Routing\Annotation\Route;
 
 
 /**
- * @Route("/catalog")
- *
  * @IsGranted("IS_AUTHENTICATED_FULLY")
  */
 class BookController extends AbstractController
 {
     /**
-     * @Route("/", name="app_catalog", methods={"GET"})
+     * @Route("/catalog", name="app_catalog", methods={"GET"})
      *
      * @param BookRepository $bookRepository
      *
@@ -29,14 +27,14 @@ class BookController extends AbstractController
     public function index(BookRepository $bookRepository): Response
     {
         dump($bookRepository->findAll());
-        
+
         return $this->render('book/index.html.twig', [
             'books' => $bookRepository->findAll(),
         ]);
     }
 
     /**
-     * @Route("/new", name="aap_book_new", methods= {"GET", "POST"})
+     * @Route("/book/new", name="aap_book_new", methods= {"GET", "POST"})
      *
      * @param Request $request
      *
@@ -71,7 +69,7 @@ class BookController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="app_book_show", methods={"GET"})
+     * @Route("/book/{slug}", name="app_book_show", methods={"GET"})
      *
      * @param Book $book
      *
@@ -85,7 +83,7 @@ class BookController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="book_edit", methods={"GET", "POST"})
+     * @Route("/book/{slug}/edit", name="app_book_edit", methods={"GET", "POST"})
      *
      * @param Request $request
      * @param Book    $book
@@ -104,7 +102,11 @@ class BookController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('app_logout', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash('success', 'Le livre a été modifié avec succés');
+
+            return $this->redirectToRoute('app_book_show', [
+                'slug' => $book->getSlug(),
+            ], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('book/edit.html.twig', [
@@ -114,7 +116,7 @@ class BookController extends AbstractController
     }
 
     /**
-     * @Route("/delete/{id}", name="book_delete", methods={"POST"})
+     * @Route("/book/{id}/delete", name="book_delete", methods={"POST"})
      *
      * @param Request $request
      * @param Book    $book

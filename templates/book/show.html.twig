@@ -1,38 +1,41 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Book{% endblock %}
+{% block title %}{{ book.title }}{% endblock %}
+
+{% block body_id 'book_show' %}
 
 {% block main %}
-    <h1>Book</h1>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ book.id }}</td>
-            </tr>
-            <tr>
-                <th>Title</th>
-                <td>{{ book.title }}</td>
-            </tr>
-            <tr>
-                <th>CoverImageName</th>
-                <td>{{ book.coverImageName }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ book.description }}</td>
-            </tr>
-            <tr>
-                <th>Author</th>
-                <td>{{ book.author }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="container book-show-container">
+        <div class="row">
+            <div class="col-md-4">
+                <img src="{% if book.coverFile %}{{ asset(book.coverFile) }}{% endif %}"
+                     alt="Image du livre {{ book.title }}" class="book-show-img" width="350">
+            </div>
 
-    <a href="{{ path('app_catalog') }}">back to list</a>
+            <div class="col-md-8">
+                <h3 class="mb-3">{{ book.title | capitalize }}</h3>
 
-    <a href="{{ path('book_edit', {'id': book.id}) }}">edit</a>
+                <p>{{ book.description }}</p>
 
-    {{ include('book/_delete_form.html.twig') }}
+                <p>{{ book.author }}</p>
+
+                <div class="mediatheque-borrow-btn">
+                    <a class="btn btn-primary" href="">Réserver</a>
+                </div>
+            </div>
+
+            <div class="container">
+                <div class="row mediatheque-book-action-links">
+                    <a href="{{ path('app_catalog') }}">Retour à la médiatheque</a>
+
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('app_book_edit', {'slug': book.slug}) }}">Modifier</a>
+
+                        {{ include('book/_delete_form.html.twig') }}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
