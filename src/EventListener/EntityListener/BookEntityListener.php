@@ -27,6 +27,6 @@ class BookEntityListener
     public function preUpdate(Book $book, LifecycleEventArgs $event)
     {
         $book->initializeSlug($this->slugger);
-        $book->setUpdatedAt(new \DateTime());
+        $book->setIsUpdatedAt(new \DateTime());
     }
 }

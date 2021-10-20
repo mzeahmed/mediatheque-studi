@@ -8,6 +8,22 @@
 
 {% block body_id 'book_show' %}
 
+ {% block javascripts %}
+     <script>
+       function deleteBookConfirmation () {
+         Swal.fire({
+           title: 'Sûre ?',
+           text: 'Vous allez retirer ce livre de la bibliotheque',
+           showCancelButton: true,
+           cancelButtonText: 'Annuler',
+           confirmButtonColor: '#2196f3',
+           cancelButtonColor: '#d33',
+           confirmButtonText: 'Oui, retirer !'
+         });
+       }
+     </script>
+ {% endblock %}
+
 {% block main %}
 
     <div class="container book-show-container">
@@ -15,6 +31,12 @@
             <div class="col-md-4">
                 <img src="{% if book.coverFile %}{{ asset(book.coverFile) }}{% endif %}"
                      alt="Image du livre {{ book.title }}" class="book-show-img" width="350">
+                {% if book.isReserved == true %}
+                    <span class="mediatheque-book-not-available"
+                          style="position:relative; bottom: 25px;left: 15px;color: #fff;background: red; border-radius: 15px">
+                        Indisponible
+                    </span>
+                {% endif %}
             </div>
 
             <div class="col-md-8">
@@ -22,10 +44,14 @@
 
                 <p>{{ book.description }}</p>
 
-                <p>{{ book.author }}</p>
+                <p><strong>Autheur</strong> : {{ book.author }}</p>
+                <p><strong>Date de publication </strong>: {{ book.isReleasedAt | date('d-m-Y') }}</p>
 
                 <div class="mediatheque-borrow-btn">
-                    <a class="btn btn-primary" href="">Réserver</a>
+                    {% if book.isReserved == false %}
+                        <a class="btn btn-primary js-reserve-book"
+                           href="{{ path('app_borrow_new', {'bookId': book.id}) }}">Réserver</a>
+                    {% endif %}
                 </div>
             </div>
 
@@ -36,7 +62,9 @@
                     {% if is_granted('ROLE_ADMIN') %}
                         <a href="{{ path('app_book_edit', {'slug': book.slug}) }}">Modifier</a>
 
-                        {{ include('book/_delete_form.html.twig') }}
+                        {% if book.isReserved == false %}
+                            {{ include('book/_delete_form.html.twig') }}
+                        {% endif %}
                     {% endif %}
                 </div>
             </div>

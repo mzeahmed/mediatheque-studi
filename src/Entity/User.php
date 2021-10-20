@@ -64,6 +64,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->borrows = new ArrayCollection();
     }
 
+
+    public function __toString(): string
+    {
+        return $this->firstname . ' ' . $this->lastname;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -119,21 +125,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @see PasswordAuthenticatedUserInterface
-     */
-    public function getPassword(): string
-    {
-        return $this->password;
-    }
-
-    public function setPassword(string $password): self
-    {
-        $this->password = $password;
-
-        return $this;
-    }
-
-    /**
      * Returning a salt is only needed, if you are not using a modern
      * hashing algorithm (e.g. bcrypt or sodium) in your security.yaml.
      *
@@ -151,6 +142,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    /**
+     * @see PasswordAuthenticatedUserInterface
+     */
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
+
+        return $this;
     }
 
     public function getFirstname(): ?string
@@ -199,7 +205,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function addBorrow(Borrow $borrow): self
     {
-        if (! $this->borrows->contains($borrow)) {
+        if (!$this->borrows->contains($borrow)) {
             $this->borrows[] = $borrow;
             $borrow->setBorrower($this);
         }

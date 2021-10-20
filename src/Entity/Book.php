@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Exception;
 use App\Repository\BookRepository;
 use Symfony\Component\HttpFoundation\File\File;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -51,11 +52,6 @@ class Book
     private $genre;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Borrow::class, inversedBy="books")
-     */
-    private $borrow;
-
-    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      *
      * @var string | null
@@ -87,26 +83,28 @@ class Book
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $updatedAt;
+    private $isUpdatedAt;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $isBorrowed = 0;
+    private $isReserved = 0;
 
     /**
-     * @ORM\Column(type="datetime", nullable=true)
+     * @ORM\OneToMany(targetEntity=Borrow::class, mappedBy="book", orphanRemoval=true)
      */
-    private $isBorrowedAt;
+    private $borrows;
 
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    private $isReturnedAt;
 
     public function __construct()
     {
-        $this->genre = new ArrayCollection();
+        $this->genre   = new ArrayCollection();
+        $this->borrows = new ArrayCollection();
+    }
+
+    public function __toString(): string
+    {
+        return $this->title;
     }
 
     /**
@@ -182,18 +180,6 @@ class Book
         return $this;
     }
 
-    public function getBorrow(): ?Borrow
-    {
-        return $this->borrow;
-    }
-
-    public function setBorrow(?Borrow $borrow): self
-    {
-        $this->borrow = $borrow;
-
-        return $this;
-    }
-
     public function getCoverName()
     {
         return $this->coverName;
@@ -232,18 +218,6 @@ class Book
         return $this;
     }
 
-    public function getIsBorrowed(): ?bool
-    {
-        return $this->isBorrowed;
-    }
-
-    public function setIsBorrowed(bool $isBorrowed): self
-    {
-        $this->isBorrowed = $isBorrowed;
-
-        return $this;
-    }
-
     public function getSlug(): ?string
     {
         return $this->slug;
@@ -268,38 +242,56 @@ class Book
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeInterface
+    public function getIsUpdatedAt(): ?\DateTimeInterface
     {
-        return $this->updatedAt;
+        return $this->isUpdatedAt;
     }
 
-    public function setUpdatedAt(?\DateTimeInterface $updatedAt): self
+    public function setIsUpdatedAt(?\DateTimeInterface $isUpdatedAt): self
     {
-        $this->updatedAt = $updatedAt;
+        $this->isUpdatedAt = $isUpdatedAt;
 
         return $this;
     }
 
-    public function getIsBorrowedAt(): ?\DateTimeInterface
+    public function getIsReserved(): ?bool
     {
-        return $this->isBorrowedAt;
+        return $this->isReserved;
     }
 
-    public function setIsBorrowedAt(?\DateTimeInterface $isBorrowedAt): self
+    public function setIsReserved(bool $isReserved): self
     {
-        $this->isBorrowedAt = $isBorrowedAt;
+        $this->isReserved = $isReserved;
 
         return $this;
     }
 
-    public function getIsReturnedAt(): ?\DateTimeInterface
+    /**
+     * @return Collection|Borrow[]
+     */
+    public function getBorrows(): Collection
     {
-        return $this->isReturnedAt;
+        return $this->borrows;
     }
 
-    public function setIsReturnedAt(?\DateTimeInterface $isReturnedAt): self
+    public function addBorrow(Borrow $borrow): self
     {
-        $this->isReturnedAt = $isReturnedAt;
+        if (! $this->borrows->contains($borrow)) {
+            $this->borrows[] = $borrow;
+            $borrow->setBook($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBorrow(Borrow $borrow): self
+    {
+        if ($this->borrows->removeElement($borrow)) {
+            // set the owning side to null (unless already changed)
+            if ($borrow->getBook() === $this) {
+                $borrow->setBook(null);
+            }
+        }
 
         return $this;
     }

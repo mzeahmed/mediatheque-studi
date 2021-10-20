@@ -12,9 +12,7 @@ class BorrowType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('isBorrowed')
-            ->add('isBorrowedAt')
-            ->add('isReturnedAt')
+            ->add('book')
             ->add('borrower')
         ;
     }
