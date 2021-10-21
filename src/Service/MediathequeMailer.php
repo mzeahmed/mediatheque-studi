@@ -60,4 +60,24 @@ class MediathequeMailer
 
         $this->mailer->send($email);
     }
+
+    /***
+     * @param $borrower
+     *
+     * @throws TransportExceptionInterface
+     */
+    public function borrowConfirmationMessage($borrower, $book)
+    {
+        $email = (new TemplatedEmail())
+            ->from(new Address($this->sender))
+            ->to(new Address($borrower->getEmail()))
+            ->subject('Confirmation de reservation')
+            ->htmlTemplate('emails/borrowing_confirmation.html.twig')
+            ->context([
+                'borrower' => $borrower,
+                'book' => $book,
+            ]);
+
+        $this->mailer->send($email);
+    }
 }

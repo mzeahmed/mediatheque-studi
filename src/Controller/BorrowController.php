@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Book;
 use App\Entity\Borrow;
+use App\Service\MediathequeMailer;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,8 +24,9 @@ class BorrowController extends AbstractController
      * @param Book $book
      *
      * @return Response
+     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
      */
-    public function reserve(Book $book): Response
+    public function reserve(Book $book, MediathequeMailer $mailer): Response
     {
         $borrow = new Borrow();
         $em     = $this->getDoctrine()->getManager();
@@ -46,6 +48,8 @@ class BorrowController extends AbstractController
         $em->persist($borrow);
 
         $em->flush();
+
+        $mailer->borrowConfirmationMessage($borrow->getBorrower(), $book);
 
         return $this->json([
             'code' => 'reserved',

@@ -28,7 +28,7 @@ class AppFixtures extends Fixture
         $employee
             ->setFirstname('Ahmed')
             ->setLastname('Mze')
-            ->setEmail('houdjiva@gmail.com')
+            ->setEmail('mzeahmed@employee.com')
             ->setAdress($faker->address)
             ->setRoles(['ROLE_ADMIN', 'ROLE_EMPLOYEE'])
             ->setPassword($this->hasher->hashPassword($employee, 'password'))
@@ -43,7 +43,7 @@ class AppFixtures extends Fixture
         $resident
             ->setFirstname('Louis')
             ->setLastname('Resident')
-            ->setEmail('resident@resident.net')
+            ->setEmail('louisresident@resident.net')
             ->setAdress($faker->address)
             ->setRoles(['ROLE_USER'])
             ->setPassword($this->hasher->hashPassword($employee, 'password'))
