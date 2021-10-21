@@ -1,5 +1,5 @@
-<form method="post" action="{{ path('book_delete', {'id': book.id}) }}"
+<form method="post" action="{{ path('app_book_delete_admin', {'id': book.id}) }}"
       onsubmit="return confirm('Vous êtes sûre de voulir supprimmer ce livre?');">
     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ book.id) }}">
-    <button class="btn btn-primary">Supprimer le livre</button>
+    <button class="btn btn-primary mediatheque-btn">Supprimer le livre</button>
 </form>

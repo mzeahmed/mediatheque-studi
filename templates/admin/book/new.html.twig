@@ -1,18 +1,18 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Ajouter un livre{% endblock %}
+{% block title %}admin - Ajouter un livre{% endblock %}
 
 {% block seo %}
     <meta name="robots" content="noindex, nofollow">
 {% endblock %}
 
-{% block body_id 'book_add' %}
+{% block body_id 'book_add_admin' %}
 
 {% block main %}
     <div class="container">
         <h1>Ajouter un nouveau livre</h1>
 
-        {{ include('book/_form.html.twig') }}
+        {{ include('admin/book/_form.html.twig') }}
 
         <a href="{{ path('app_catalog') }}">Retour à la médiatheque</a>
     </div>

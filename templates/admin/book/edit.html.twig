@@ -1,17 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Modifier le livre {{ book.title }}{% endblock %}
+{% block title %}admin - Modifier le livre {{ book.title }}{% endblock %}
 
 {% block seo %}
     <meta name="robots" content="noindex, nofollow">
 {% endblock %}
 
-{% block body_id 'book_edit' %}
+{% block body_id 'book_edit_admin' %}
 
 {% block main %}
     <div class="container">
         <h1>Modifier le livre</h1>
 
-        {{ include('book/_form.html.twig', {'button_label': 'Modifier'}) }}
+        {{ include('admin/book/_form.html.twig', {'button_label': 'Modifier'}) }}
     </div>
 {% endblock %}

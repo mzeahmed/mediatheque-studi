@@ -1,11 +1,6 @@
 @import "catalog";
 @import "show";
-
-#book_add {
-    .invalid-feedback {
-        color: #fff !important;
-    }
-}
+@import "../admin/book_admin";
 
 #book_genre {
     display: flex !important;

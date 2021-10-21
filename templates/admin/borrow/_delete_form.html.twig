@@ -1,0 +1,5 @@
+<form method="post" action="{{ path('app_borrow_delete_admin', {'id': borrow.id}) }}"
+      onsubmit="return confirm('Vous êtes sûre de voulir supprimmer cet emprunt?');">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ borrow.id) }}">
+    <button class="btn btn-danger">x</button>
+</form>

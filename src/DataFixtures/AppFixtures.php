@@ -42,8 +42,8 @@ class AppFixtures extends Fixture
         $resident = new User();
         $resident
             ->setFirstname('Louis')
-            ->setLastname('De Funes')
-            ->setEmail('louisdefunes@mediatheque.net')
+            ->setLastname('Resident')
+            ->setEmail('resident@resident.net')
             ->setAdress($faker->address)
             ->setRoles(['ROLE_USER'])
             ->setPassword($this->hasher->hashPassword($employee, 'password'))

@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Emprunts{% endblock %}
+
+{% block body_id 'borrow_admin' %}
+
+{% block main %}
+    <div class="container mediatheque-catalog-container">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 mb-3">
+            {% for borrow in borrows %}
+                <div class="col-md-4">
+                    <div class="card" style="width: 18rem;">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><strong>Livre : </strong>{{ borrow.book }}</li>
+                            <li class="list-group-item"><strong>Habitant : </strong>{{ borrow.borrower }}</li>
+                            <li class="list-group-item"><strong>Date de retour
+                                    : </strong>{{ borrow.bookReturnDate | date() }}
+                            </li>
+                        </ul>
+                    </div>
+
+                    {{ include('admin/borrow/_delete_form.html.twig') }}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

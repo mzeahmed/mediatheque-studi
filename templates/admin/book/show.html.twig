@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ book.title }}{% endblock %}
+{% block title %} - admin - {{ book.title }}{% endblock %}
 
 {% block seo %}
     <meta name="robots" content="noindex, nofollow">
@@ -30,26 +30,14 @@
                 {% endfor %}
                 <p><strong>Autheur</strong> : {{ book.author }}</p>
                 <p><strong>Date de publication </strong>: {{ book.isReleasedAt | date('d-m-Y') }}</p>
-
-                <div class="mediatheque-borrow-btn">
-                    {% if book.isReserved == false %}
-                        <a class="btn btn-primary js-reserve-book mediatheque-btn"
-                           href="{{ path('app_borrow_new', {'bookId': book.id}) }}">Réserver</a>
-                    {% endif %}
-                </div>
             </div>
 
             <div class="container">
                 <div class="row mediatheque-book-action-links">
-                    <a href="{{ path('app_catalog') }}">Retour à la médiatheque</a>
+                    <a href="{{ path('app_book_edit_admin', {'slug': book.slug}) }}">Modifier</a>
 
-                    {% if is_granted('ROLE_ADMIN') %}
-                        <a href="{{ path('app_book_edit_admin', {'slug': book.slug}) }}">Modifier</a>
+                    {{ include('admin/book/_delete_form.html.twig') }}
 
-                        {% if book.isReserved == false %}
-                            {{ include('admin/book/_delete_form.html.twig') }}
-                        {% endif %}
-                    {% endif %}
                 </div>
             </div>
         </div>

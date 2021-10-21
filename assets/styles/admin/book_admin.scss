@@ -1,0 +1,19 @@
+#book_add_admin {
+    .invalid-feedback {
+        color: #fff !important;
+    }
+}
+
+#catalog_admin, #admin_borrow {
+    background-color: gray;
+
+    .catalog-edit-btn {
+        margin-left: 15px;
+    }
+
+    .app-pagination {
+        a {
+            color: #fff;
+        }
+    }
+}

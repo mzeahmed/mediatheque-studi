@@ -7,7 +7,7 @@
 
         {% block seo %}{% endblock %}
 
-        <title>Médiatheque- {% block title %}{% endblock %}</title>
+        <title>Médiatheque - {% block title %}{% endblock %}</title>
 
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
@@ -20,7 +20,7 @@
     <body id="{% block body_id %}{% endblock %}">
 
         {% include 'partials/_header.html.twig' %}
-        
+
         {% for label, messages in app.flashes %}
             <div class="container" style="margin-top: 80px">
                 <div class="alert alert-{{ label }}">
