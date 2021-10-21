@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 /**
@@ -21,10 +22,11 @@ class BorrowController extends AbstractController
      * @Route("/reserve/{bookId}", name="app_borrow_new", methods={"GET","POST"})
      * @ParamConverter("book", options={"mapping": {"bookId": "id"}})
      *
-     * @param Book $book
+     * @param Book              $book
+     * @param MediathequeMailer $mailer
      *
      * @return Response
-     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
+     * @throws TransportExceptionInterface
      */
     public function reserve(Book $book, MediathequeMailer $mailer): Response
     {
