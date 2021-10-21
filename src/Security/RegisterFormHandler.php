@@ -17,25 +17,25 @@ class RegisterFormHandler extends AbstractController
     private UserPasswordHasherInterface $hasher;
     private MediathequeMailer $mailer;
     private TokenGeneratorInterface $tokenGenerator;
-    private string $adminEmail;
+    private Employee $employee;
 
 
     /**
      * @param UserPasswordHasherInterface $hasher
      * @param MediathequeMailer           $mailer
      * @param TokenGeneratorInterface     $tokenGenerator
-     * @param string                      $adminEmail
+     * @param Employee                    $employee
      */
     public function __construct(
         UserPasswordHasherInterface $hasher, MediathequeMailer $mailer,
         TokenGeneratorInterface $tokenGenerator,
-        string $adminEmail
+        Employee $employee
     ) {
         $this->hasher         = $hasher;
         $this->mailer         = $mailer;
         $this->tokenGenerator = $tokenGenerator;
 
-        $this->adminEmail = $adminEmail;
+        $this->employee = $employee;
     }
 
     /**
@@ -50,8 +50,7 @@ class RegisterFormHandler extends AbstractController
      */
     public function store(User $user, $form, string $errorRedirectionRoute, string $successRedirectionRoute, Request $request)
     {
-        $employeeEmail = $this->getDoctrine()->getRepository(User::class)->findOneBy(['email' => $this->adminEmail]);
-        $em            = $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
 
         $form->handleRequest($request);
 
@@ -77,7 +76,7 @@ class RegisterFormHandler extends AbstractController
             $em->persist($user);
             $em->flush();
 
-            $this->mailer->residentIsRegistered($employeeEmail, $user);
+            $this->mailer->residentIsRegistered($this->employee->getEmployee(), $user);
 
             $this->addFlash(
                 'success',

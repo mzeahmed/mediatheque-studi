@@ -40,10 +40,12 @@ services:
         class: 'App\Service\MediathequeMailer'
         arguments:
             $sender: '%app.notifications.email.sender%'
-
-    App\Security\RegisterFormHandler:
-        arguments:
             $adminEmail: '%app.admin.email%'
+
+    App\Service\Employee:
+        class: 'App\Service\Employee'
+        arguments:
+            $employee: '%app.admin.email%'
 
     #    App\Service\Employee:
     #        class: 'App\Service\Employee'

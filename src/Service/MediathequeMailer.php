@@ -14,24 +14,26 @@ class MediathequeMailer
 
     /** @see config/services.yaml */
     private string $sender;
+    private string $adminEmail;
 
-    public function __construct(MailerInterface $mailer, string $sender)
+    public function __construct(MailerInterface $mailer, string $sender, string $adminEmail)
     {
-        $this->mailer = $mailer;
-        $this->sender = $sender;
+        $this->mailer     = $mailer;
+        $this->sender     = $sender;
+        $this->adminEmail = $adminEmail;
     }
 
     /**
-     * @param      $employee
+     * @param User $employee
      * @param User $resident
      *
      * @throws TransportExceptionInterface
      */
-    public function residentIsRegistered($employee, User $resident)
+    public function residentIsRegistered(User $employee, User $resident)
     {
         $email = (new TemplatedEmail())
             ->from(new Address($this->sender))
-            ->to(new Address($employee->getEmail()))
+            ->to(new Address($this->adminEmail))
             ->subject('Un habitant s\'est inscrit')
             ->htmlTemplate('emails/resident_register.html.twig')
             ->context([
@@ -63,6 +65,7 @@ class MediathequeMailer
 
     /***
      * @param $borrower
+     * @param $book
      *
      * @throws TransportExceptionInterface
      */

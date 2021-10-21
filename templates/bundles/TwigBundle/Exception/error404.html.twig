@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}404 - Page non trouvée{% endblock %}
+
+{% block main %}
+    <div class="container">
+        <div class="text-center g-flex-centered-item g-position-rel g-pb-15">
+            <div class="g-font-size-180 g-font-size-240--sm g-line-height-1 g-font-weight-600er g-color-gray-light-v4">
+                404
+            </div>
+
+            <div class="center-block">
+                <h1 class="g-color-black g-mt-minus-8 mb-0">Oops! <br> Page non trouvée</h1>
+
+                <hr class="g-brd-gray-light-v3 g-my-15">
+
+                <p class="g-font-size-18 mb-0">
+                    Il semble que rien n'a été trouvé à cet endroit. <br>
+                    <a href="{{ path('homepage') }}"
+                       class="g-color-black g-color-primary--hover g-text-no-underline--hover">
+                        ← revenir vers la page d'accueil
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+{% endblock %}
