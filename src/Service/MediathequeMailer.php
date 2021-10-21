@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Entity\User;
 use Symfony\Component\Mime\Address;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
@@ -21,17 +22,40 @@ class MediathequeMailer
     }
 
     /**
+     * @param      $employee
+     * @param User $resident
+     *
      * @throws TransportExceptionInterface
      */
-    public function residentIsRegistered($employee)
+    public function residentIsRegistered($employee, User $resident)
     {
         $email = (new TemplatedEmail())
             ->from(new Address($this->sender))
-            ->to(new Address($employee))
+            ->to(new Address($employee->getEmail()))
             ->subject('Un habitant s\'est inscrit')
             ->htmlTemplate('emails/resident_register.html.twig')
             ->context([
                 'employee' => $employee,
+                'resident' => $resident,
+            ]);
+
+        $this->mailer->send($email);
+    }
+
+    /**
+     * @param User $resident
+     *
+     * @throws TransportExceptionInterface
+     */
+    public function validateConfirmation(User $resident)
+    {
+        $email = (new TemplatedEmail())
+            ->from(new Address($this->sender))
+            ->to(new Address($resident->getEmail()))
+            ->subject('Votre a été validé')
+            ->htmlTemplate('emails/resident_validation.html.twig')
+            ->context([
+                'resident' => $resident,
             ]);
 
         $this->mailer->send($email);

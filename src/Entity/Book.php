@@ -95,7 +95,6 @@ class Book
      */
     private $borrows;
 
-
     public function __construct()
     {
         $this->genre   = new ArrayCollection();

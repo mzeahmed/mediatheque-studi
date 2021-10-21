@@ -59,6 +59,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $borrows;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $adress;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isActivated = 0;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $activationToken;
+
     public function __construct()
     {
         $this->borrows = new ArrayCollection();
@@ -205,7 +220,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function addBorrow(Borrow $borrow): self
     {
-        if (!$this->borrows->contains($borrow)) {
+        if (! $this->borrows->contains($borrow)) {
             $this->borrows[] = $borrow;
             $borrow->setBorrower($this);
         }
@@ -221,6 +236,42 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $borrow->setBorrower(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getAdress(): ?string
+    {
+        return $this->adress;
+    }
+
+    public function setAdress(string $adress): self
+    {
+        $this->adress = $adress;
+
+        return $this;
+    }
+
+    public function getIsActivated(): ?bool
+    {
+        return $this->isActivated;
+    }
+
+    public function setIsActivated(bool $isActivated): self
+    {
+        $this->isActivated = $isActivated;
+
+        return $this;
+    }
+
+    public function getActivationToken(): ?string
+    {
+        return $this->activationToken;
+    }
+
+    public function setActivationToken(?string $activationToken): self
+    {
+        $this->activationToken = $activationToken;
 
         return $this;
     }

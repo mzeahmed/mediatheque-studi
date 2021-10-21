@@ -1,21 +1,22 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Book index{% endblock %}
+{% block title %}Catalogue{% endblock %}
 
 {% block body_id 'catalog' %}
 
 {% block main %}
     <div class="container mediatheque-catalog-container">
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-            {% for book in books %}
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 mb-3">
+            {% for book in paginator.data %}
                 <div class="col-md-4">
                     <div class="card shadow">
                         <img class="card-img-top catalog-img"
-                             src="{% if book.coverFile %} {{ asset(book.coverFile) }} {% endif %}"
-                             alt="Image du livre {{ book.title }}">
+                             src="{% if book.coverFile %} {{ asset(book.coverFile) }}{% else %} https://picsum.photos/640/360{% endif %}"
+                             alt="Image du livre {{ book.title }}" height="300" width="300">
 
                         <div class="card-body">
-                            <p class="card-text">{{ book.description }}</p>
+                            <h5 class="card-title">{{ book.title }}</h5>
+                            <p class="card-text">{{ book.description | slice( 0, 250) }} ...</p>
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="btn-group">
                                     <a href="{{ path('app_book_show', {'slug': book.slug}) }}"
@@ -36,5 +37,6 @@
                 </div>
             {% endfor %}
         </div>
+        {{ paginator.display }}
     </div>
 {% endblock %}

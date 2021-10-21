@@ -5,9 +5,9 @@
                 <a class="g-rounded-50"
                    href="{{ path(route, {'page': page - 1}) }}" aria-label="Previous">
                     <span aria-hidden="true">
-                        <i class="fas fa-arrow-left"></i> {% trans %}Previous{% endtrans %}
+                        <i class="fas fa-arrow-left"></i> Précédent
                     </span>
-                    <span class="sr-only">{% trans %}Previous{% endtrans %}</span>
+                    <span class="sr-only">Précédent</span>
                 </a>
             </li>
         {% endif %}
@@ -24,9 +24,9 @@
                 <a class="g-rounded-50 "
                    href="{{ path(route, {'page': page + 1}) }}" aria-label="Next">
                     <span aria-hidden="true">
-                        {% trans %}Next{% endtrans %} <i class="fas fa-arrow-right"></i>
+                        Suivant <i class="fas fa-arrow-right"></i>
                     </span>
-                    <span class="sr-only">{% trans %}Next{% endtrans %}</span>
+                    <span class="sr-only">Suivant</span>
                 </a>
             </li>
         {% endif %}

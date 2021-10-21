@@ -5,7 +5,8 @@ function borrow (event) {
   event.preventDefault();
 
   const url = this.href;
-  const reserveBook = document.querySelector('.js-reserve-book')
+  const reserveBook = document.querySelector('.js-reserve-book');
+  const img = document.querySelector('.book-show-img');
 
   axios.get(url)
     .then(function (response) {
@@ -14,10 +15,16 @@ function borrow (event) {
         confirmButtonColor: '#2196f3'
       });
 
-      reserveBook.remove()
+      reserveBook.remove();
     })
     .catch(function (error) {
-
+      if (error === 403) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Une erreur s\'est produite'
+        });
+      }
     });
 }
 

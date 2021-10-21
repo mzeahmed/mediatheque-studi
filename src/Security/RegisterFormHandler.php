@@ -10,23 +10,32 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 
 class RegisterFormHandler extends AbstractController
 {
     private UserPasswordHasherInterface $hasher;
     private MediathequeMailer $mailer;
-    private Employee $employee;
+    private TokenGeneratorInterface $tokenGenerator;
+    private string $adminEmail;
+
 
     /**
      * @param UserPasswordHasherInterface $hasher
      * @param MediathequeMailer           $mailer
-     * @param Employee                    $employee
+     * @param TokenGeneratorInterface     $tokenGenerator
+     * @param string                      $adminEmail
      */
-    public function __construct(UserPasswordHasherInterface $hasher, MediathequeMailer $mailer, Employee $employee)
-    {
-        $this->hasher   = $hasher;
-        $this->mailer   = $mailer;
-        $this->employee = $employee;
+    public function __construct(
+        UserPasswordHasherInterface $hasher, MediathequeMailer $mailer,
+        TokenGeneratorInterface $tokenGenerator,
+        string $adminEmail
+    ) {
+        $this->hasher         = $hasher;
+        $this->mailer         = $mailer;
+        $this->tokenGenerator = $tokenGenerator;
+
+        $this->adminEmail = $adminEmail;
     }
 
     /**
@@ -41,14 +50,15 @@ class RegisterFormHandler extends AbstractController
      */
     public function store(User $user, $form, string $errorRedirectionRoute, string $successRedirectionRoute, Request $request)
     {
-        $employeeEmail = $this->employee->getEmployee()->getEmail();
+        $employeeEmail = $this->getDoctrine()->getRepository(User::class)->findOneBy(['email' => $this->adminEmail]);
         $em            = $this->getDoctrine()->getManager();
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $email      = $form->get('email')->getData();
-            $emailExist = $em->getRepository(User::class)->findOneBy(['email' => $email]);
+            $activationToken = $this->tokenGenerator->generateToken();
+            $email           = $form->get('email')->getData();
+            $emailExist      = $em->getRepository(User::class)->findOneBy(['email' => $email]);
 
             if ($emailExist) {
                 $this->addFlash('danger',
@@ -61,12 +71,13 @@ class RegisterFormHandler extends AbstractController
             $user
                 ->setPassword($this->hasher->hashPassword($user, $form->get('password')->getData()))
                 ->setRoles(['ROLE_USER'])
+                ->setActivationToken($activationToken)
             ;
 
             $em->persist($user);
             $em->flush();
 
-            $this->mailer->residentIsRegistered($employeeEmail);
+            $this->mailer->residentIsRegistered($employeeEmail, $user);
 
             $this->addFlash(
                 'success',

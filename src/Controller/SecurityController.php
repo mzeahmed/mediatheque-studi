@@ -4,17 +4,16 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\RegisterType;
-use App\Service\Employee;
 use App\Service\MediathequeMailer;
 use App\Security\RegisterFormHandler;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class SecurityController extends AbstractController
 {
@@ -72,5 +71,39 @@ class SecurityController extends AbstractController
             'user' => $user,
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @Route("/activation/{activationToken}", name="app_activation")
+     *
+     * @IsGranted("IS_AUTHENTICATED_FULLY")
+     *
+     * @param                   $activationToken
+     * @param MediathequeMailer $mailer
+     *
+     * @return RedirectResponse
+     * @throws TransportExceptionInterface
+     */
+    public function activate($activationToken, MediathequeMailer $mailer): RedirectResponse
+    {
+        if (! $this->isGranted("ROLE_ADMIN")) {
+            return $this->redirectToRoute('app_home');
+        }
+
+        $em   = $this->getDoctrine()->getManager();
+        $user = $em->getRepository(User::class)->findOneBy(['activationToken' => $activationToken]);
+
+        $user
+            ->setIsActivated(true)
+            ->setActivationToken(null)
+        ;
+
+        $em->flush();
+
+        $mailer->validateConfirmation($user);
+
+        $this->addFlash('success', 'Le resident est bien activé, il va recevoir un mail de confirmation');
+
+        return $this->redirectToRoute('app_home');
     }
 }

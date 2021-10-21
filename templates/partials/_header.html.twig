@@ -17,7 +17,13 @@
                             <li class="nav-item book-add-item">
                                 <a class="nav-link" href="{{ path('app_book_new') }}">Ajouter un livre</a>
                             </li>
+                            {# <li class="nav-item admin-link-item"> #}
+                            {# <a class="nav-link" href="{{ path('app_admin') }}">Backoffice</a> #}
+                            {# </li> #}
                         {% endif %}
+                        <li class="nav-item user-borrows-item">
+                            <a class="nav-link" href="{{ path('app_user_borrows') }}">Voir mes emprunts</a>
+                        </li>
                     </ul>
                 {% endif %}
                 <div class="navbar-text logout-item">

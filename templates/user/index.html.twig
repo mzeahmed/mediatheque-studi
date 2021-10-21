@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes emprunts{% endblock %}
+
+{% block main %}
+    <div class="container">
+        <div class="row">
+            {% for borrow in app.user.borrows %}
+                {% set diff = getDaysBetween2Dates(date(), borrow.bookReturnDate, false) %}
+
+                <div class="col-md-4">
+                    <div class="card shadow">
+                        <img class="card-img-top catalog-img"
+                             src="{% if borrow.book.coverFile %}{{ asset(borrow.book.coverFile) }}{% else %} https://picsum.photos/640/360{% endif %}"
+                             alt="Image du livre {{ borrow.book.title }}" height="300" width="300">
+
+                        <div class="card-body">
+                            <h5 class="card-title">{{ borrow.book.title }}</h5>
+                            <p class="card-text">{{ borrow.book.description | slice( 0, 250) }} ...</p>
+                        </div>
+                    </div>
+                    {% if diff > 1 %}
+                        <div class="alert alert-warning">
+                            Vous avez {{ diff }} {% if diff > 1 %}jours{% else %}jour{% endif %} de retard dans
+                            la restitution de ce livre !
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

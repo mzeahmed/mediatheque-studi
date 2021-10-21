@@ -29,45 +29,52 @@ class AppFixtures extends Fixture
             ->setFirstname('Ahmed')
             ->setLastname('Mze')
             ->setEmail('houdjiva@gmail.com')
+            ->setAdress($faker->address)
             ->setRoles(['ROLE_ADMIN', 'ROLE_EMPLOYEE'])
             ->setPassword($this->hasher->hashPassword($employee, 'password'))
             ->setIsBornAt(new \DateTime('1985-01-25'))
+            ->setIsActivated(true)
         ;
 
         $manager->persist($employee);
 
-        // On ajoute des habitants
-        $residents = [];
-        $genres    = ['male', 'female'];
+        // On ajoute un habitant
+        $resident = new User();
+        $resident
+            ->setFirstname('Louis')
+            ->setLastname('De Funes')
+            ->setEmail('louisdefunes@mediatheque.net')
+            ->setAdress($faker->address)
+            ->setRoles(['ROLE_USER'])
+            ->setPassword($this->hasher->hashPassword($employee, 'password'))
+            ->setIsBornAt(new \DateTime('1994-01-08'))
+            ->setIsActivated(true)
+        ;
 
-        for ($i = 1; $i <= 30; $i++) {
-            $resident = new User();
-            $genre    = $faker->randomElement($genres);
-            $password = $this->hasher->hashPassword($resident, 'password');
+        $manager->persist($resident);
 
-            $resident
-                ->setFirstname($faker->firstName($genre))
-                ->setLastname($faker->lastName($genre))
-                ->setEmail($faker->email)
-                ->setRoles(['ROLE_USER', 'ROLE_RESIDENT'])
-                ->setPassword($password)
-                ->setIsBornAt($faker->dateTimeBetween('-35 years'))
+        for ($b = 1; $b <= 15; $b++) {
+            // On ajoutes les genres
+            for ($g = 1; $g <= 6; $g++) {
+                $genre = new Genre();
+                $genre
+                    ->setName($faker->word())
+                ;
+
+                $manager->persist($genre);
+            }
+
+            $book        = new Book();
+            $description = '<p>' . join('</p><p>', $faker->paragraphs(5)) . '</p>';
+            $book
+                ->setTitle($faker->sentence)
+                ->setAuthor($faker->name)
+                ->setDescription(strip_tags($description))
+                ->setIsReleasedAt($faker->dateTimeBetween('-15 years'))
             ;
 
-            $manager->persist($resident);
-            $residents[] = $resident;
+            $manager->persist($book);
         }
-
-        // On ajoutes les genres
-        for ($i = 1; $i <= 6; $i++) {
-            $genre = new Genre();
-            $genre
-                ->setName($faker->word())
-            ;
-
-            $manager->persist($genre);
-        }
-
 
         $manager->flush();
     }

@@ -42,6 +42,13 @@
                     {% endif %}
                     {{ form_widget(form.email) }}
 
+                    {% if form_errors(form.adress) %}
+                        <div class="alert alert-danger">
+                            {{ form_errors(form.adress) }}
+                        </div>
+                    {% endif %}
+                    {{ form_widget(form.adress) }}
+
                     {% if form_errors(form.isBornAt) %}
                         <div class="alert alert-danger">
                             {{ form_errors(form.isBornAt) }}
@@ -72,4 +79,27 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://cdn.jsdelivr.net/npm/places.js@1.19.0"></script>
+    <script>
+
+      // function register () {
+      let inputAdress = document.querySelector('#register_adress');
+      let apId = 'WXMOK56HLA';
+      let apiKey = '4f08fc167bbdff1fed774e68a53c4757';
+
+      if (inputAdress !== null) {
+        let place = Places({
+          apId, apiKey,
+          container: inputAdress
+        });
+        place.on('change', (e) => {
+          document.querySelector('#register_lat').value = e.suggestion.latlng.lat;
+          document.querySelector('#register_lng').value = e.suggestion.latlng.lng;
+        });
+      }
+      // }
+    </script>
 {% endblock %}

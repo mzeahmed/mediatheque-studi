@@ -14,3 +14,14 @@
         margin-right: 15px;
     }
 }
+
+#book_show {
+    .mediatheque-book-not-available {
+        position: relative;
+        bottom: 25px;
+        left: 15px;
+        color: #fff;
+        background: red;
+        border-radius: 15px
+    }
+}

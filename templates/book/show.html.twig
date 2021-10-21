@@ -8,34 +8,16 @@
 
 {% block body_id 'book_show' %}
 
- {% block javascripts %}
-     <script>
-       function deleteBookConfirmation () {
-         Swal.fire({
-           title: 'Sûre ?',
-           text: 'Vous allez retirer ce livre de la bibliotheque',
-           showCancelButton: true,
-           cancelButtonText: 'Annuler',
-           confirmButtonColor: '#2196f3',
-           cancelButtonColor: '#d33',
-           confirmButtonText: 'Oui, retirer !'
-         });
-       }
-     </script>
- {% endblock %}
 
 {% block main %}
 
     <div class="container book-show-container">
         <div class="row">
             <div class="col-md-4">
-                <img src="{% if book.coverFile %}{{ asset(book.coverFile) }}{% endif %}"
+                <img src="{% if book.coverFile %} {{ asset(book.coverFile) }}{% else %} https://picsum.photos/640/360{% endif %}"
                      alt="Image du livre {{ book.title }}" class="book-show-img" width="350">
                 {% if book.isReserved == true %}
-                    <span class="mediatheque-book-not-available"
-                          style="position:relative; bottom: 25px;left: 15px;color: #fff;background: red; border-radius: 15px">
-                        Indisponible
-                    </span>
+                    <span class="mediatheque-book-not-available">Indisponible</span>
                 {% endif %}
             </div>
 
@@ -43,13 +25,15 @@
                 <h3 class="mb-3">{{ book.title | capitalize }}</h3>
 
                 <p>{{ book.description }}</p>
-
+                {% for genre in book.genre %}
+                    <p><strong>Genre</strong> : {{ genre.name }}</p>
+                {% endfor %}
                 <p><strong>Autheur</strong> : {{ book.author }}</p>
                 <p><strong>Date de publication </strong>: {{ book.isReleasedAt | date('d-m-Y') }}</p>
 
                 <div class="mediatheque-borrow-btn">
                     {% if book.isReserved == false %}
-                        <a class="btn btn-primary js-reserve-book"
+                        <a class="btn btn-primary js-reserve-book mediatheque-btn"
                            href="{{ path('app_borrow_new', {'bookId': book.id}) }}">Réserver</a>
                     {% endif %}
                 </div>

@@ -41,6 +41,13 @@
                     {% endif %}
                     {{ form_widget(form.email) }}
 
+                    {% if form_errors(form.adress) %}
+                        <div class="alert alert-danger">
+                            {{ form_errors(form.adress) }}
+                        </div>
+                    {% endif %}
+                    {{ form_widget(form.adress) }}
+
                     {% if form_errors(form.isBornAt) %}
                         <div class="alert alert-danger">
                             {{ form_errors(form.isBornAt) }}

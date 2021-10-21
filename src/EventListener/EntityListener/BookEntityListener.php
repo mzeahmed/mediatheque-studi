@@ -6,9 +6,6 @@ use App\Entity\Book;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
-/**
- * On écoute le moment ou un book est créé ou modifié et initialiser automatiquement le slug
- */
 class BookEntityListener
 {
     private SluggerInterface $slugger;

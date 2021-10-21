@@ -6,6 +6,20 @@
         <title>Inscription d'un habitant</title>
     </head>
     <body>
+        <p>
+            Bonjour {{ employee.firstname }}<br>
 
+            Un resident du nom de {{ resident.firstname }} {{ resident.lastname }} vient de s'inscrire sur la
+            mediatheque,<br>
+            Rends toi sur cette URL en etant connécté pour activer son compte. <br>
+
+            <a href="{{ absolute_url(path('app_activation', {'activationToken': resident.activationToken})) }}">
+                Activer son compte
+            </a>
+            <br>
+            Ou copie colle l'URL ci-dessous directement dans le navigateur, (toujours en etant connécté) <br>
+
+            {{ absolute_url(path('app_activation', {'activationToken': resident.activationToken})) }}
+        </p>
     </body>
 </html>

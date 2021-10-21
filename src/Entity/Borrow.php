@@ -33,6 +33,11 @@ class Borrow
     private $borrower;
 
     /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $bookReturnDate;
+
+    /**
      * @ORM\PrePersist()
      */
     public function prePersist()
@@ -79,6 +84,18 @@ class Borrow
     public function setBorrower(?User $borrower): self
     {
         $this->borrower = $borrower;
+
+        return $this;
+    }
+
+    public function getBookReturnDate(): ?\DateTimeInterface
+    {
+        return $this->bookReturnDate;
+    }
+
+    public function setBookReturnDate(?\DateTimeInterface $bookReturnDate): self
+    {
+        $this->bookReturnDate = $bookReturnDate;
 
         return $this;
     }

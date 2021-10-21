@@ -8,6 +8,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 
@@ -31,6 +32,7 @@ class RegisterType extends AbstractType
                 'attr' => [
                     'placeholder' => 'Email',
                 ],
+                'required' => 'required',
             ])
             ->add('isBornAt', BirthdayType::class, [
                 'label' => 'Date de naissance',
@@ -41,11 +43,18 @@ class RegisterType extends AbstractType
                     'year' => 'Année',
                 ],
                 'format' => 'dd-MM-yyyy',
+                'required' => 'required',
+            ])
+            ->add('adress', TextType::class, [
+                'attr' => [
+                    'placeholder' => 'Adresse',
+                ],
             ])
             ->add('password', PasswordType::class, [
                 'attr' => [
                     'placeholder' => 'Mot de passe',
                 ],
+                'required' => 'required',
             ])
         ;
     }

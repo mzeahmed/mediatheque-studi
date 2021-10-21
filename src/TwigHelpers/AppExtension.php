@@ -23,6 +23,7 @@ class AppExtension extends AbstractExtension
         return [
             new TwigFunction('gravatarUrl', [$this, 'gravatarUrl']),
             new TwigFunction('setActive', [$this, 'setActive']),
+            new TwigFunction('getDaysBetween2Dates', [$this, 'getDaysBetween2Dates']),
         ];
     }
 
@@ -57,5 +58,23 @@ class AppExtension extends AbstractExtension
         }
 
         return '';
+    }
+
+    /**
+     * Retourne la différence de jours entre $date1 et $date2 ($date1 - $date2)
+     * si le paramètre $absolute est faux, la valeur de retour est négative si $date2 est postérieur à $date1
+     *
+     * @param \DateTime $date1
+     * @param \DateTime $date2
+     * @param Boolean   $absolute
+     *
+     * @return int
+     */
+    public function getDaysBetween2Dates(\DateTime $date1, \DateTime $date2, bool $absolute = true): int
+    {
+        $interval = $date2->diff($date1);
+        // si l'on doit prendre en compte la position relative (!$absolute) et que la position relative est négative,
+        // on retourne la valeur négative sinon, on retourne la valeur absolue
+        return (! $absolute and $interval->invert) ? -$interval->days : $interval->days;
     }
 }

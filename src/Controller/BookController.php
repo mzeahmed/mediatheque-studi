@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Book;
 use App\Form\BookType;
+use App\Service\Paginator;
 use App\Repository\BookRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,16 +19,25 @@ use Symfony\Component\Routing\Annotation\Route;
 class BookController extends AbstractController
 {
     /**
-     * @Route("/catalog", name="app_catalog", methods={"GET"})
+     * @Route("/catalog/{page<\d+>?1}", name="app_catalog", methods={"GET"})
      *
      * @param BookRepository $bookRepository
+     * @param Paginator      $paginator
+     * @param                $page
      *
      * @return Response
      */
-    public function index(BookRepository $bookRepository): Response
+    public function index(BookRepository $bookRepository, Paginator $paginator, $page): Response
     {
+        $paginator
+            ->setEntityClass(Book::class)
+            ->setLimit(6)
+            ->setPage($page)
+            ->setOrderBy(['isReleasedAt' => 'DESC'])
+        ;
+
         return $this->render('book/index.html.twig', [
-            'books' => $bookRepository->findAll(),
+            'paginator' => $paginator,
         ]);
     }
 
@@ -41,7 +51,7 @@ class BookController extends AbstractController
     public function new(Request $request): Response
     {
         if (! $this->isGranted("ROLE_ADMIN")) {
-            return $this->redirectToRoute('app_catalog');
+            return $this->redirectToRoute('app_home');
         }
 
         $book = new Book();
@@ -55,7 +65,7 @@ class BookController extends AbstractController
 
             $this->addFlash('success', 'Le livre a bien été ajouté au catalogue');
 
-            return $this->redirectToRoute('app_catalog', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('book/new.html.twig', [
