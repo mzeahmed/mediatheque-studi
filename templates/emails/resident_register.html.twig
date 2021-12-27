@@ -11,7 +11,7 @@
 
             Un resident du nom de {{ resident.firstname }} {{ resident.lastname }} vient de s'inscrire sur la
             mediatheque,<br>
-            Rends toi sur cette URL en etant connécté pour activer son compte. <br>
+            Connectes toi et rends toi sur cette URL pour activer son compte. <br>
 
             <a href="{{ absolute_url(path('app_activation', {'activationToken': resident.activationToken})) }}">
                 Activer son compte
